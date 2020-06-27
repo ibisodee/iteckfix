@@ -1,0 +1,175 @@
+@include('inc.adminheader')        
+<!--  BEGIN CONTENT AREA  -->
+<div id="content" class="main-content">
+    <div class="layout-px-spacing">
+
+        <div class="page-header">
+            <div class="page-title">
+            <h3>Payment Reminders</h3>
+            <p>Admin User</p>
+            </div>
+        </div>
+        
+        <div class="row layout-top-spacing">
+        <div class="col-lg-12 col-12  layout-spacing">
+                            <div class="statbox widget box box-shadow">
+                                <div class="widget-header">                                
+                                    <div class="row">
+                                        <div class="col-xl-12 col-md-12 col-sm-12 col-12">
+                                            <h4>First Check Service Request Details Via Track ID</h4>
+                                            {!! Form::open([ 'method' => 'POST', 'enctype' => 'multipart/form-data']) !!}
+                                            <div class="form-row mb-4">                                           
+                                                <div class="col">
+                                                    <input type="text" name="id" class="form-control" placeholder="Enter Track ID to Search"><br>
+                                                </div>
+                                            <div class="col">
+                                            <input type="submit" class="btn btn-outline-primary mb-2" name="search" value="Search Track ID">
+                                            {!! Form::close() !!}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="widget-content widget-content-area">
+                                 
+                                    <form>
+                                        <div class="form-group row  mb-4">
+                                            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Track ID</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control" name="trackid" type="text" placeholder="Track ID" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row  mb-4">
+                                            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Request on</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control"  name="date"  type="text" placeholder="Request Date" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row  mb-4">
+                                            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Service Group</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control"   name="group" type="text" placeholder="Request Service Group" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-4">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">Repair Category</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control"  name="category" type="text" placeholder="Request Repair Category" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row  mb-4">
+                                            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Fault</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control"  name="fault" type="text" placeholder="Device Fault…" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-4">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">Model</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control"  name="model" type="text" placeholder="Model or Type" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row  mb-4">
+                                            <label for="colFormLabelSm" class="col-sm-2 col-form-label col-form-label-sm">Other Info.</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control"  name="bill" type="text" placeholder="Service Request Fault Details…" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-4">
+                                            <label for="colFormLabel" class="col-sm-2 col-form-label">Model</label>
+                                            <div class="col-sm-10">
+                                            <input class="form-control" type="text" placeholder="Device Model" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row mb-4">
+                                            <label for="colFormLabelLg" class="col-sm-2 col-form-label col-form-label-lg">Service Amount</label>
+                                            <div class="col-sm-10">
+                                            <input type="text" class="form-control form-control-sm" id="colFormLabelSm" placeholder="Update Service Charge" required >
+                                            
+                                            </div>
+                                        </div>
+                                        
+                                        <input type="submit" name="time" value="update" class="mb-4 btn btn-primary">
+                                    </form>
+
+                                    <form method='post' action='/admin/payment_reminder/save'>
+
+                                    <!-- Message -->
+                                    @if(Session::has('message'))
+                                    <p >{{ Session::get('message') }}</p>
+                                    @endif
+
+                                    <!-- Add/List records -->
+                                    <table border='1' style='border-collapse: collapse;'>
+                                    <tr>
+                                        <th>TrackID</th>
+                                        <th>Bill</th>
+                                        <th>Engineer</th>
+                                        <th></th>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="4">{{ csrf_field() }}</td>
+                                    </tr>
+                                    <!-- Add -->
+                                    <tr>
+                                        <td><input type='text' name='id'></td>
+                                        <td><input type='text' name='bill'></td>
+                                        <td><input type='email' name='repairer'></td>
+                                        <td><input type='submit' name='submit' value='Add'></td>
+                                    </tr>
+
+                                    <!-- List -->
+                                    @foreach($userData['data'] as $user)
+                                    <tr>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->id }}</td>
+                                        <td>{{ $user->bill }}</td>
+                                        <td>{{ $user->repairer }}</td>
+                                        <td><a href='/admin/payment_reminder/{{ $user->id }}'>Update</a> <a href='/admin/payment_reminder/deleteUser/{{ $user->id }}'>Delete</a></td>
+                                    </tr>
+                                    @endforeach
+                                    </table>
+                                </form>
+
+                                <!-- Edit -->
+                                @if($userData['edit'])
+                                <form method='post' action='/admin/payment_reminder/save'>
+                                <table>
+                                    <tr>
+                                    <td colspan='2'><h1>Edit record</h1></td>
+                                    </tr>
+                                    <tr>
+                                    <td colspan="2">{{ csrf_field() }}</td>
+                                    </tr>
+                                    <tr>
+                                    <td>name</td>
+                                    <td><input type='text' name='id' readonly value='{{ $userData["editData"]->id }}' ></td>
+                                    </tr>
+                                    <tr>
+                                    <td>Bill</td>
+                                    <td><input type='text' name='bill' value='{{ $userData["editData"]->bill }}'></td>
+                                    </tr> 
+                                    <tr>
+                                    <td>Repairer</td>
+                                    <td><input type='text' name='repairer' value='{{ $userData["editData"]->repairer }}' ></td>
+                                    </tr>
+                                    <tr>
+                                    <td>&nbsp;<input type='hidden' value='{{ $userData["edit"] }}' name='editid'></td>
+                                    <td><input type='submit' name='submit' value='Submit'></td>
+                                    </tr>
+                                </table>
+                                </form>
+                                @endif
+
+                                    
+
+                                </div>
+                            </div>
+                        </div>
+
+ 
+        </div>
+
+
+        </div>
+        @include('inc.adminfooter')
